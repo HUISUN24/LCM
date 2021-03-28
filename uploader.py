@@ -12,7 +12,7 @@ def upload():
 
     print('Starting the upload process!\nLoading credentials...')
 
-    cred = json.load(open('credentialsAdam.json'))
+    cred = json.load(open('credentials.json'))
     if cred['name']=='test':
         return 'Loaded test credentials. Aborting!'
     print('Loaded credentials for: '+cred['name'])

@@ -14,7 +14,8 @@ def upload():
 
     cred = json.load(open('credentials.json'))
     if cred['name']=='test':
-        return 'Loaded test credentials. Aborting!'
+        print('Loaded test credentials. Aborting!')
+        return
     print('Loaded credentials for: '+cred['name'])
 
     #Import metadata
@@ -25,7 +26,7 @@ def upload():
     metaParsed = json.loads(meta)['data']
     # get timestamp
     now = datetime.now()
-    dateString = now.strftime('%Y-%d-%b-%H-%M-%S')
+    dateString = now.strftime('%Y-%d-%b-%H-%M')
     # Format metadata into a dictionary
     metaData = {
         'name': metaParsed[0][1],
@@ -38,13 +39,18 @@ def upload():
     print('Data credited to: '+metaParsed[0][1])
     print('Contact email: '+metaParsed[1][1])
 
+    # Logging progress into a CSV table
+    dataFileName = excelFile.replace('.xls', '').replace('.xlsx', '')
+    logger = open(dataFileName+'_REPORT_'+dateString+'.csv', "w")
+    logger.write('Composition, Result\n')
+
     # Import data
     print('Importing data.')
     df2 = pd.read_excel(excelFile,
                        usecols="A:N",nrows=500,skiprows=8)
     result = df2.to_json(orient="records")
     parsed = json.loads(result)
-    print('Imported '+str(parsed.__len__())+' datapoints.')
+    print('Imported '+str(parsed.__len__())+' datapoints.\n')
 
     # Connect to the MongoDB using the credentails
     client_string = 'mongodb+srv://' + cred['name'] + ':' + cred[
@@ -57,13 +63,20 @@ def upload():
 
     # Convert metadata and data into database datapoints and upload
     for datapoint in parsed:
-        uploadEntry = datapoint2entry(metaData, datapoint)
-        comp = uploadEntry['material']['formula'].replace(' ','')
+        comp = datapoint['Composition'].replace(' ','')
+        print('Processing: '+comp)
         try:
+            uploadEntry = datapoint2entry(metaData, datapoint)
             collection.insert_one(uploadEntry)
-            print('Succesfully uploaded a datapoint for '+comp)
-        except:
-            print('Upload of '+comp+' failed!')
+            logger.write(comp+',Success!\n')
+            print('Succesfully uploaded the datapoint!\n')
+        except ValueError as e:
+            exceptionMessage = str(e)
+            print(exceptionMessage)
+            logger.write(comp + ',Fail!,<-------,'+exceptionMessage+'\n')
+            print('Upload failed!\n')
+            pass
+    logger.close()
 
 
 #%% Modify composition string from the template into a unified
@@ -79,7 +92,8 @@ def compStr2compList(s):
                 compObj.reduced_formula, compObj.chemical_system, compObj.__len__()]
     except:
         print("Warning! Can't parse composition!: "+s)
-        return ['', [], '', '', '', 0]
+        raise ValueError("Warning! Can't parse composition!: "+s)
+        #return ['', [], '', '', '', 0]
 
 #%% Unifies phase names in the database
 # If composition -> keep as is
@@ -169,63 +183,72 @@ def datapoint2entry(metaD, dataP):
     try:
         compList = compStr2compList(dataP['Composition'])
     except:
-        print('Warning. Parsing an entry with an empty composition field.')
+        #print('Warning. Parsing an entry with an empty composition field.')
+        raise ValueError("Could not parse the composition! Required for upload. Aborting upload!")
 
-    try:
-        entry['material'].update({
-                'formula' : compList[0],
-                'compositionDictionary' : compList[1],
-                'anonymizedFormula' : compList[2],
-                'reducedFormula' : compList[3],
-                'system' : compList[4],
-                'nComponents' : compList[5]})
-    except:
-        pass
+    entry['material'].update({
+            'formula' : compList[0],
+            'compositionDictionary' : compList[1],
+            'anonymizedFormula' : compList[2],
+            'reducedFormula' : compList[3],
+            'system' : compList[4],
+            'nComponents' : compList[5]})
 
     # structure
     try:
-        structList = structStr2list(dataP['Structure'])
-    except:
-        print('Warning! Parsing an entry with an empty structure field.')
-
-    try:
-        entry['material'].update({
-                'structure' : structList[0],
-                'nPhases' : structList[1]})
+        if dataP['Structure'] is not None:
+            structList = structStr2list(dataP['Structure'])
+            entry['material'].update({
+                'structure': structList[0],
+                'nPhases': structList[1]})
+        else:
+            print('No structure data!')
     except:
         pass
 
     # processing
     try:
-        processingList = processStr2list(dataP['Processing'])
-    except:
-        print('Warning! Parsing an entry with an empty structure field.')
-
-    try:
-        entry['material'].update({
-                'processes' : processingList[0],
-                'nProcessSteps' : processingList[1]})
+        if dataP['Processing'] is not None:
+            processingList = processStr2list(dataP['Processing'])
+            entry['material'].update({
+                    'processes' : processingList[0],
+                    'nProcessSteps' : processingList[1]})
+        else:
+            print('No process data!')
     except:
         pass
 
     # comment
     try:
-        entry['material'].update({
-                'comment' : dataP['Material Comment']})
+        if dataP['Material Comment'] is not None:
+            entry['material'].update({
+                    'comment' : dataP['Material Comment']})
     except:
         pass
 
     try:
-        entry['property'].update({
-            'name' : dataP['Name'],
-            'source' : dataP['Source'],
-            'temperature' : dataP['Temperature [K]'],
-            'value' : dataP['Value [SI]'],
-            #'unitName' : dataP['Unit [SI]']
-            })
-        entry['reference'].update({
-                'pointer' : dataP['Pointer'],
-                'doi' : dataP['DOI']})
+        if dataP['Name'] is not None:
+            entry['property'].update({
+                'name' : dataP['Name'],
+                'source' : dataP['Source'],
+                'temperature' : dataP['Temperature [K]'],
+                'value' : dataP['Value [SI]'],
+                #'unitName' : dataP['Unit [SI]']
+                })
+        else:
+            print('No property data!')
+            del entry['property']
+    except:
+        pass
+
+    try:
+        if dataP['DOI'] is not None:
+            entry['reference'].update({
+                    'pointer' : dataP['Pointer'],
+                    'doi' : dataP['DOI']})
+        else:
+            print('No reference data!')
+            del entry['reference']
     except:
         pass
 
@@ -234,4 +257,3 @@ def datapoint2entry(metaD, dataP):
 
 if __name__ == "__main__":
    upload()
-   print('Success!')

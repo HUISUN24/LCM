@@ -1,0 +1,4 @@
+pandas
+pymatgen
+pymongo
+dnspython

@@ -3,7 +3,7 @@
 import pandas as pd
 import sys
 import json
-import pymatgen as mg
+import pymatgen.core as mg
 import time
 from datetime import datetime
 from pymongo import MongoClient

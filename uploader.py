@@ -4,6 +4,7 @@ import pandas as pd
 import sys
 import json
 import pymatgen as mg
+import time
 from datetime import datetime
 from pymongo import MongoClient
 
@@ -17,6 +18,23 @@ def upload():
         print('Loaded test credentials. Aborting!')
         return
     print('Loaded credentials for: '+cred['name'])
+
+    # Connect to the MongoDB using the credentails
+    client_string = 'mongodb+srv://' + cred['name'] + ':' + cred[
+        'dbKey'] + '@testcluster.g3kud.mongodb.net/ULTREA_materials?retryWrites=true&w=majority'
+    database_name = 'ULTREA_materials'
+    collection_name = cred['name']
+
+    client = MongoClient(client_string)
+    collection = client[database_name][collection_name]
+    print('Connected to the database.')
+
+    if excelFile=='-PurgeMyCollection':
+        print('Warning. All data from your collection will be removed in 5s.\nPress Ctrl+C to abort.')
+        time.sleep(5)
+        collection.remove({})
+        print('Collection purged.')
+        return
 
     #Import metadata
     print('Reading the metadata.')
@@ -51,15 +69,6 @@ def upload():
     result = df2.to_json(orient="records")
     parsed = json.loads(result)
     print('Imported '+str(parsed.__len__())+' datapoints.\n')
-
-    # Connect to the MongoDB using the credentails
-    client_string = 'mongodb+srv://' + cred['name'] + ':' + cred[
-        'dbKey'] + '@testcluster.g3kud.mongodb.net/ULTREA_materials?retryWrites=true&w=majority'
-    database_name = 'ULTREA_materials'
-    collection_name = cred['name']
-
-    client = MongoClient(client_string)
-    collection = client[database_name][collection_name]
 
     # Convert metadata and data into database datapoints and upload
     for datapoint in parsed:

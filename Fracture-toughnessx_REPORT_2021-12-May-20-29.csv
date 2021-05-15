@@ -1,0 +1,78 @@
+Composition, Result
+Fe10.5Co10.5Ni10.5Cr10.5Cu10.5Ti10.5Mo10.5Al10.5Si10.5Be5.5,Success!
+Fe14.3Co14.3Ni14.3Cr14.3Al42.8,Success!
+AL23Co15Cr23Cu8Fe15Ni15,Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+Cr20Mn20Fe20Co20Ni20,Success!
+Cr20Mn20Fe20Co20Ni21,Success!
+Cr20Mn20Fe20Co20Ni22,Success!
+Al16.7Cr16.7Fe16.7Ni33.2Cu16.7,Success!
+Al16.7Cr16.7Fe16.7Ni33.2Cu16.8,Success!
+Al5.9Cr29.4Fe29.4Ni29.4Ti5.9,Success!
+Al18Cr21Fe20Co20Ni21,Success!
+Al15.5Cr22.25Fe20Co20Ni22.25,Success!
+Al13Cr23.5Fe20Co20Ni23.5,Success!
+CrCoNi,Success!
+CrCoNi,Success!
+CrCoNi,Success!
+Nb25Mo25Ta25W25,Success!
+Nb25Mo25Ta25W25,Success!
+Ti25Zr25Nb25Ta25,Success!
+Ti23.75Zr23.75Nb23.75Ta23.75Mo5,Success!
+Ti22.5Zr22.5Nb22.5Ta22.5Mo10,Success!
+Ti20Zr20Nb20Ta20Mo20,Success!
+V10Cr10Fe45Co20Ni15,Success!
+V10Cr10Fe45Co20Ni15,Success!
+Ti25V25Nb25Ta25,Success!
+Fe41Co7Cr15Mo14C15B6Y2,Success!
+Zr41.2Ti13.8Cu12.5Ni10Be22.5,Success!
+Ni59Zr20Ti16Si2Sn3,Success!
+(Zr0.25Hf0.25Ta0.25Ti0.25)C,Success!
+Mo,Success!
+Mo,Success!
+W,Success!
+W97.13Ni2.01Fe0.86,Success!
+W92.5Ni5.33Fe2.19,Success!
+W90Ni6.78Fe2.95,Success!
+W95Ni3.48Fe1.49,Success!
+W97.13Ni2.01Fe0.86,Success!
+W92.5Ni5.33Fe2.19,Success!
+W95Ni3.48Fe1.49,Success!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+TiAl6V4(wt),Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+Nb51Ti26Hf4Cr2Al2Si15,Success!
+Nb41Ti27Cr8Al9Si15,Success!
+Nb83.5Si16.5,Success!
+Nb90Si10,Success!
+Nb42.5Ti42.5Si15,Success!
+Nb40Ti40Si15Al5,Success!
+FeNiCoMo,Success!
+NiAl,Success!
+NiAl/Mo,Fail!,<-------,Could not parse the composition! Required for upload. Aborting upload!
+V,Success!
+MoSi,Success!
+Al23Cr23Co15Cu8Fe15Ni15,Success!
+AlCrFeNi2Cu,Success!
+AlCrFeNi2Cu,Success!
+Al0.2CrFeNiTi0.2,Success!
+FeCoNiCrCuTiMoAlSiB0.,Success!
+Al23Cr23Co15Cu8Fe15Ni15,Success!
+Zr61Ti2Cu25Al12,Success!
+CoCrFeNiAl0.25Ti0.5,Success!
+Nb5Si3,Success!
+NbTi40Si15Al5,Success!
+W,Success!
+W,Success!
+W,Success!
+WSi2,Success!
+MoSI2,Success!

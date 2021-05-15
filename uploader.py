@@ -103,6 +103,8 @@ def compStr2compList(s):
         print("Warning! Can't parse composition!: "+s)
         raise ValueError("Warning! Can't parse composition!: "+s)
         #return ['', [], '', '', '', 0]
+    print([compObj.iupac_formula, compObj.as_dict(), compObj.anonymized_formula,
+                compObj.reduced_formula, compObj.chemical_system, compObj.__len__()])
 
 #%% Unifies phase names in the database
 # If composition -> keep as is
@@ -149,6 +151,7 @@ def structStr2list(s):
     except:
         print('Warning! Error parsing structure list.')
         return []
+    print([ls, ls.__len__()])
 
 #%% Process name unifier
 
@@ -191,10 +194,11 @@ def datapoint2entry(metaD, dataP):
     # composition
     try:
         compList = compStr2compList(dataP['Composition'])
+
     except:
         #print('Warning. Parsing an entry with an empty composition field.')
         raise ValueError("Could not parse the composition! Required for upload. Aborting upload!")
-
+    print('comp',compList)
     entry['material'].update({
             'formula' : compList[0],
             'compositionDictionary' : compList[1],
@@ -214,7 +218,7 @@ def datapoint2entry(metaD, dataP):
             print('No structure data!')
     except:
         pass
-
+    print('Structure',structList)
     # processing
     try:
         if dataP['Processing'] is not None:
